@@ -29,7 +29,7 @@ func (h *UserHandler) ListUsers(c *gin.Context) {
 	response := map[string]interface{}{
 		"page":        page,
 		"total_pages": totalPages,
-		"data":        users,
+		"users":        users,
 	}
 	c.JSON(http.StatusOK, gin.H{"Users": response})
 }

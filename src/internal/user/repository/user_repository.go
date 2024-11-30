@@ -19,7 +19,7 @@ func (r *UserRepository) GetAllUsers(limit, offset int) ([]models.User, int, err
 	var users []models.User
 	var total int
 
-	query := `SELECT id, username, balance FROM users LIMIT $1 OFFSET $2`
+	query := `SELECT id, username, balance, affiliate_id FROM users LIMIT $1 OFFSET $2`
 	rows, err := r.db.Query(context.Background(), query, limit, offset)
 	if err != nil {
 		return nil, 0, err
@@ -28,7 +28,7 @@ func (r *UserRepository) GetAllUsers(limit, offset int) ([]models.User, int, err
 
 	for rows.Next() {
 		var user models.User
-		if err := rows.Scan(&user.ID, &user.Username, &user.Balance); err != nil {
+		if err := rows.Scan(&user.ID, &user.Username, &user.Balance, &user.AffiliateID); err != nil {
 			return nil, 0, err
 		}
 		users = append(users, user)
@@ -44,8 +44,8 @@ func (r *UserRepository) GetAllUsers(limit, offset int) ([]models.User, int, err
 
 func (r *UserRepository) GetUserByID(id string) (*models.User, error) {
 	var user models.User
-	query := `SELECT id, username, balance FROM users WHERE id = $1`
-	err := r.db.QueryRow(context.Background(), query, id).Scan(&user.ID, &user.Username, &user.Balance)
+	query := `SELECT id, username, balance, affiliate_id FROM users WHERE id = $1`
+	err := r.db.QueryRow(context.Background(), query, id).Scan(&user.ID, &user.Username, &user.Balance, &user.AffiliateID)
 	if err != nil {
 		return nil, err
 	}
